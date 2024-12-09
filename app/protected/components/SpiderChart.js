@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import {createClient} from "@/utils/supabase/client";
 
 ChartJS.register(
   RadialLinearScale,
@@ -19,8 +20,20 @@ ChartJS.register(
   Legend
 );
 
-const RadarChart = () => {
-  const data = {
+const RadarChart = ({ chartData }) => {
+  const options = {
+    scales: {
+      r: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+  return <Radar data={chartData} options={options} />;
+};
+
+export default function SpiderChart({ data, selectedBrand, selectedModel, selectedUseCase }) {
+  const [chartData, setChartData] = useState({
     labels: [
       "Wet performance",
       "Snow performance",
@@ -35,32 +48,49 @@ const RadarChart = () => {
       "Irregular wear",
       "Tire outward design",
     ],
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: [12, 19, 3, 5, 2, 3, 8, 12, 14, 6, 10, 4],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
+    datasets: [],
+  });
 
-  const options = {
-    scales: {
-      r: {
-        beginAtZero: true,
-      },
-    },
-  };
+  useEffect(() => {
+    if (selectedModel && data.length > 0) {
+      const filteredData = data.filter(item => item.Model === selectedModel);
+      if (filteredData.length > 0) {
+        const newData = chartData.labels.map(label => {
+          const value = filteredData[0][label];
+          return value !== null ? value : 0;
+        });
 
-  return <Radar data={data} options={options} />;
-};
+        const getRandomColor = () => {
+          const letters = '0123456789ABCDEF';
+          let color = '#';
+          for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        };
 
-export default function Home() {
+        const color = getRandomColor();
+
+        setChartData((prevData) => ({
+          ...prevData,
+          datasets: [
+            ...prevData.datasets,
+            {
+              label: `${selectedBrand} ${selectedModel}`,
+              data: newData,
+              backgroundColor: `${color}33`,
+              borderColor: color,
+              borderWidth: 1,
+            },
+          ],
+        }));
+      }
+    }
+  }, [selectedModel, data]);
+
   return (
-    <div style={{ width: "50%", margin: "50px auto" }}>
-      <RadarChart />
+    <div style={{ width: "100%", margin: "50px auto" }}>
+      <RadarChart chartData={chartData} />
     </div>
   );
 }
