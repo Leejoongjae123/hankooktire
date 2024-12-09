@@ -4,7 +4,9 @@ import { Select, SelectItem } from "@nextui-org/react";
 import {Button, ButtonGroup} from "@nextui-org/button";
 import { IoMdDownload } from "react-icons/io";
 
-import Chart from "./Chart";
+import SpiderChart from "./SpiderChart";
+import BarChart from "./BarChart";
+
 function ChartUI() {
   return (
     <div className="w-full flex flex-col gap-8">
@@ -33,7 +35,7 @@ function ChartUI() {
         
         <Button startContent={<IoMdDownload className="text-medium text-white"/>} color="primary">이미지</Button>
         </div>
-        <Chart></Chart>
+        <SpiderChart></SpiderChart>
         
       </div>
 
@@ -54,6 +56,16 @@ function ChartUI() {
             <SelectItem key="3">3</SelectItem>
           </Select>
         </div> */}
+      </div>
+
+      <div className="flex-1 flex flex-col">
+        <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">그래프</h1>
+        
+        <Button startContent={<IoMdDownload className="text-medium text-white"/>} color="primary">이미지</Button>
+        </div>
+        <BarChart></BarChart>
+        
       </div>
     </div>
   );

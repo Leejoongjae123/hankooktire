@@ -37,7 +37,7 @@ const RadarChart = () => {
     ],
     datasets: [
       {
-        label: "데이타1",
+        label: "Dataset 1",
         data: [12, 19, 3, 5, 2, 3, 8, 12, 14, 6, 10, 4],
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderColor: "rgba(255, 99, 132, 1)",
@@ -59,7 +59,7 @@ const RadarChart = () => {
 
 export default function Home() {
   return (
-    <div style={{ width: "600px", margin: "50px auto" }}>
+    <div style={{ width: "50%", margin: "50px auto" }}>
       <RadarChart />
     </div>
   );
