@@ -10,11 +10,18 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
+  const letters = "0123456789ABCDEF";
+  let color = "#";
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
@@ -31,12 +38,15 @@ const BarChart = ({ inputData, useCase, selectedUseCase }) => {
       setShowLegend(false);
       return;
     }
-    
-    const filteredData = useCase.filter(item => item.use === selectedUseCase);
+
+    const filteredData = useCase.filter(
+      (item) => item.use === selectedUseCase || item.season === selectedUseCase
+    );
+    console.log("filteredData:", filteredData);
     const color = getRandomColor();
     const newDataset = {
       label: selectedUseCase,
-      data: labels.map(label => {
+      data: labels.map((label) => {
         return filteredData.reduce((acc, item) => {
           return acc + (item[label] !== undefined ? item[label] : 0);
         }, 0);
@@ -46,7 +56,7 @@ const BarChart = ({ inputData, useCase, selectedUseCase }) => {
       borderWidth: 1,
     };
 
-    setDatasets(prevDatasets => [...prevDatasets, newDataset]);
+    setDatasets((prevDatasets) => [...prevDatasets, newDataset]);
     setShowLegend(true);
   }, [selectedUseCase, useCase]);
 
@@ -63,7 +73,7 @@ const BarChart = ({ inputData, useCase, selectedUseCase }) => {
     "Cost",
     "Irregular wear",
     "Tire outward design",
-  ]
+  ];
   const data = {
     labels: labels,
     datasets: datasets,
@@ -87,11 +97,22 @@ const BarChart = ({ inputData, useCase, selectedUseCase }) => {
   return <Bar data={data} options={options} />;
 };
 
-export default function BarChartComponent({data,useCase, selectedBrand, selectedModel, selectedUseCase}) {
-  console.log('selectedUseCase:',selectedUseCase);
+export default function BarChartComponent({
+  data,
+  useCase,
+  selectedBrand,
+  selectedModel,
+  selectedUseCase,
+}) {
   return (
     <div style={{ width: "100%", margin: "50px auto" }}>
-      <BarChart inputData={data} useCase={useCase} selectedBrand={selectedBrand} selectedModel={selectedModel} selectedUseCase={selectedUseCase}/>
+      <BarChart
+        inputData={data}
+        useCase={useCase}
+        selectedBrand={selectedBrand}
+        selectedModel={selectedModel}
+        selectedUseCase={selectedUseCase}
+      />
     </div>
   );
 }
